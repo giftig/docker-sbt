@@ -14,7 +14,7 @@ QUIET=false
 usage() {
   echo 'docked-sbt --versions'
   echo 'docked-sbt --help'
-  echo 'docked-sbt [--scala VERSION] [--sbt VERSION] [--nocache] [--] SBT_OPTIONS'
+  echo 'docked-sbt [--scala VERSION] [--sbt VERSION] [-e|--expose-socket] [--nocache] [--] SBT_OPTIONS'
 }
 expect_arg() {
   if [[ "$1" == '' ]]; then
@@ -49,6 +49,10 @@ while [[ "$1" != '' ]]; do
       SBT_VERSION="$1"
       shift
       ;;
+    --expose-socket|-e)
+      shift
+      VOLUMES="$VOLUMES -v /var/run/docker.sock:/var/run/docker.sock"
+      ;;
     --nocache)
       VOLUMES=''
       shift
@@ -75,7 +79,7 @@ if [[ "$QUIET" != true ]]; then
   echo '================================================='
   echo 'DOCKED SBT'
   echo "Using image $IMAGE"
-  echo "Using volumes $VOLUMES"
+  echo "Using volumes $(echo $VOLUMES | sed 's|-v|\'$'\n-v|g')"
   echo '================================================='
 fi
 
