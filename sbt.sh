@@ -9,6 +9,7 @@ fi
 SBT_VERSION=0.13.13
 SCALA_VERSION=2.11.6
 VOLUMES="-v $HOME/.ivy2:/root/.ivy2"
+QUIET=false
 
 usage() {
   echo 'docked-sbt --versions'
@@ -31,6 +32,10 @@ while [[ "$1" != '' ]]; do
     --help)
       usage
       exit 0
+      ;;
+    -q|--quiet)
+      shift
+      QUIET=true
       ;;
     --scala)
       shift
@@ -66,10 +71,12 @@ if [[ $(docker images -q "$IMAGE") == '' ]]; then
   exit 1
 fi
 
-echo '================================================='
-echo 'DOCKED SBT'
-echo "Using image $IMAGE"
-echo "Using volumes $VOLUMES"
-echo '================================================='
+if [[ "$QUIET" != true ]]; then
+  echo '================================================='
+  echo 'DOCKED SBT'
+  echo "Using image $IMAGE"
+  echo "Using volumes $VOLUMES"
+  echo '================================================='
+fi
 
 docker run -it --rm -w /usr/src --entrypoint sbt $VOLUMES $IMAGE "$@"
