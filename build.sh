@@ -11,7 +11,7 @@ build_tag() {
   SCALA_VERSION=$1
   SBT_VERSION=$2
 
-  echo "Building $PREFIX/sbt for scala-$SCALA_VERSION, sbt-$SBT_VERSION"
+  echo "${YELLOW}Building $PREFIX/sbt for scala-$SCALA_VERSION, sbt-$SBT_VERSION$RESET"
   docker build \
     --build-arg SCALA_VERSION=$SCALA_VERSION \
     --build-arg SBT_VERSION=$SBT_VERSION \
