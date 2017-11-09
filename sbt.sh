@@ -8,8 +8,11 @@ fi
 
 SBT_VERSION=0.13.13
 SCALA_VERSION=2.11.6
-VOLUMES="-v $HOME/.ivy2:/root/.ivy2"
+VOLUMES=''
 QUIET=false
+
+CACHE_ROOT="$HOME"
+NOCACHE=false
 
 # Colours
 YELLOW=$(tput setaf 3)
@@ -70,13 +73,12 @@ while [[ "$1" != '' ]]; do
       VOLUMES="$VOLUMES -v /var/run/docker.sock:/var/run/docker.sock"
       ;;
     --nocache)
-      VOLUMES=''
+      NOCACHE=true
       shift
       ;;
     --cache-root)
       shift
       CACHE_ROOT="$1"
-      VOLUMES="-v $CACHE_ROOT/.ivy2:/root/.ivy2"
       shift
       ;;
     --)
@@ -88,6 +90,10 @@ while [[ "$1" != '' ]]; do
       ;;
   esac
 done
+
+if [[ "$NOCACHE" != false ]]; then
+  VOLUMES="$VOLUMES -v $CACHE_ROOT/.ivy2:/root/.ivy2 $CACHE_ROOT/.sbt:/root/.sbt"
+fi
 
 IMAGE="$IMAGE_PREFIX/sbt:$SBT_VERSION-$SCALA_VERSION"
 VOLUMES="$VOLUMES -v $(pwd):/usr/src"
