@@ -25,6 +25,7 @@ usage() {
   echo -e "--sbt VERSION\t\tDefaults to 0.13.13"
   echo -e "-e, --expose-socket\tExpose the host docker.sock to the sbt container"
   echo -e "--nocache\t\tDon't mount the user's .ivy2 dir as a volume"
+  echo -e "--cache-root\t\tMount .ivy2 from a different base dir"
   echo '--nocolor'
 }
 expect_arg() {
@@ -72,6 +73,12 @@ while [[ "$1" != '' ]]; do
       VOLUMES=''
       shift
       ;;
+    --cache-root)
+      shift
+      CACHE_ROOT="$1"
+      VOLUMES="-v $CACHE_ROOT/.ivy2:/root/.ivy2"
+      shift
+      ;;
     --)
       shift
       break
@@ -96,6 +103,7 @@ if [[ "$QUIET" != true ]]; then
   echo 'DOCKED SBT'
   echo "Using image $IMAGE"
   echo "Using volumes $(echo $VOLUMES | sed 's|-v|\'$'\n-v|g')"
+  echo "Running command sbt $@"
   echo '================================================='
   echo -n $RESET
 fi
