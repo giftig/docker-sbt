@@ -1,0 +1,3 @@
+FROM giftig/sbt:0.13.13-2.11.6
+
+RUN apt-get install -y rpm && apt-get clean
