@@ -1,9 +1,9 @@
 #!/bin/bash
 
-if [[ "$SBT_IMAGE_PREFIX" == '' ]]; then
-  IMAGE_PREFIX=giftig
+if [[ "$SBT_IMAGE" == '' ]]; then
+  IMAGE=giftig/sbt
 else
-  IMAGE_PREFIX="$SBT_IMAGE_PREFIX"
+  IMAGE="$SBT_IMAGE"
 fi
 
 SBT_VERSION=0.13.13
@@ -29,6 +29,7 @@ usage() {
   echo -e "-e, --expose-socket\tExpose the host docker.sock to the sbt container"
   echo -e "--nocache\t\tDon't mount the user's .ivy2 dir as a volume"
   echo -e "--cache-root\t\tMount .ivy2 from a different base dir"
+  echo -e "--image\t\tSpecify a different image; default is giftig/sbt"
   echo '--nocolor'
 }
 expect_arg() {
@@ -41,7 +42,7 @@ expect_arg() {
 while [[ "$1" != '' ]]; do
   case $1 in
     --versions)
-      docker images $IMAGE_PREFIX/sbt
+      docker images "$IMAGE"
       exit 0
       ;;
     --nocolor)
@@ -66,6 +67,12 @@ while [[ "$1" != '' ]]; do
       shift
       expect_arg $1
       SBT_VERSION="$1"
+      shift
+      ;;
+    --image)
+      shift
+      expect_arg $1
+      IMAGE="$1"
       shift
       ;;
     --expose-socket|-e)
@@ -95,11 +102,11 @@ if [[ "$NOCACHE" == false ]]; then
   VOLUMES="$VOLUMES -v $CACHE_ROOT/.ivy2:/root/.ivy2 -v $CACHE_ROOT/.sbt:/root/.sbt"
 fi
 
-IMAGE="$IMAGE_PREFIX/sbt:$SBT_VERSION-$SCALA_VERSION"
+IMAGE="$IMAGE:$SBT_VERSION-$SCALA_VERSION"
 VOLUMES="$VOLUMES -v $(pwd):/usr/src"
 
 if [[ $(docker images -q "$IMAGE") == '' ]]; then
-  echo "No $IMAGE_PREFIX/sbt image for sbt = $SBT_VERSION, scala = $SCALA_VERSION"
+  echo "No $IMAGE image for sbt = $SBT_VERSION, scala = $SCALA_VERSION"
   exit 1
 fi
 
