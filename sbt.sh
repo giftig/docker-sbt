@@ -91,8 +91,8 @@ while [[ "$1" != '' ]]; do
   esac
 done
 
-if [[ "$NOCACHE" != false ]]; then
-  VOLUMES="$VOLUMES -v $CACHE_ROOT/.ivy2:/root/.ivy2 $CACHE_ROOT/.sbt:/root/.sbt"
+if [[ "$NOCACHE" == false ]]; then
+  VOLUMES="$VOLUMES -v $CACHE_ROOT/.ivy2:/root/.ivy2 -v $CACHE_ROOT/.sbt:/root/.sbt"
 fi
 
 IMAGE="$IMAGE_PREFIX/sbt:$SBT_VERSION-$SCALA_VERSION"
@@ -109,7 +109,7 @@ if [[ "$QUIET" != true ]]; then
   echo 'DOCKED SBT'
   echo "Using image $IMAGE"
   echo "Using volumes $(echo $VOLUMES | sed 's|-v|\'$'\n-v|g')"
-  echo "Running command sbt $@"
+  echo -e "Running command\n  sbt $@"
   echo '================================================='
   echo -n $RESET
 fi
