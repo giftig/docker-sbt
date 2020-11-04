@@ -18,9 +18,5 @@ build_tag() {
     -t $PREFIX/sbt:$SBT_VERSION-$SCALA_VERSION .
 }
 
-build_tag 2.10.4 0.13.13
-build_tag 2.11.6 0.13.13
-build_tag 2.10.6 0.13.12
-build_tag 2.10.6 0.13.13
-build_tag 2.11.6 0.13.12
-build_tag 2.12.1 0.13.12
+build_tag 2.11.12 1.2.8
+build_tag 2.12.8 1.2.8

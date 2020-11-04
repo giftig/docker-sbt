@@ -6,4 +6,4 @@
 DIR=$(readlink -f "$(dirname $0)")
 
 # You'll need to install giftig/docker-sbt into /opt to use this script
-$DIR/sbt.sh --expose-socket --image giftig/sbt-rpm --cache-root $(pwd)/.docked-sbt -- "$@"
+$DIR/sbt.sh --expose-socket --image giftig/sbt --cache-root $(pwd)/.docked-sbt -- "$@"
