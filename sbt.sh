@@ -102,7 +102,7 @@ if [[ "$NOCACHE" == false ]]; then
   VOLUMES="$VOLUMES -v $CACHE_ROOT/.ivy2:/root/.ivy2 -v $CACHE_ROOT/.sbt:/root/.sbt"
 fi
 
-ENVIRON="-e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION"
+ENVIRON="-e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION -e DDE_NO_FATAL_WARNINGS -e XANTORIA_NO_FATAL_WARNINGS"
 IMAGE="$IMAGE:$SBT_VERSION-$SCALA_VERSION"
 VOLUMES="$VOLUMES -v $(pwd):/usr/src"
 
@@ -122,4 +122,4 @@ if [[ "$QUIET" != true ]]; then
   echo -n $RESET
 fi
 
-docker run -u $(id -u) -it --rm -w /usr/src --entrypoint sbt $ENVIRON $VOLUMES $IMAGE "$@"
+docker run -it --rm -w /usr/src --entrypoint sbt $ENVIRON $VOLUMES $IMAGE "$@"
