@@ -99,7 +99,9 @@ while [[ "$1" != '' ]]; do
 done
 
 if [[ "$NOCACHE" == false ]]; then
-  VOLUMES="$VOLUMES -v $CACHE_ROOT/.ivy2:/root/.ivy2 -v $CACHE_ROOT/.sbt:/root/.sbt"
+  VOLUMES="$VOLUMES -v $CACHE_ROOT/.ivy2:/root/.ivy2"
+  VOLUMES="$VOLUMES -v $CACHE_ROOT/.sbt:/root/.sbt"
+  VOLUMES="$VOLUMES -v $CACHE_ROOT/.cache/coursier:/root/.cache/coursier"
 fi
 
 ENVIRON="-e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION -e DDE_NO_FATAL_WARNINGS -e XANTORIA_NO_FATAL_WARNINGS"
