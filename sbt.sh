@@ -6,7 +6,6 @@ else
   IMAGE="$SBT_IMAGE"
 fi
 
-SBT_VERSION=1.2.8
 SCALA_VERSION=2.12.8
 VOLUMES=''
 QUIET=false
@@ -25,7 +24,6 @@ usage() {
   echo ''
   echo 'Options:'
   echo -e "--scala VERSION\t\tDefaults to 2.11.6"
-  echo -e "--sbt VERSION\t\tDefaults to 0.13.13"
   echo -e "-e, --expose-socket\tExpose the host docker.sock to the sbt container"
   echo -e "--nocache\t\tDon't mount the user's .ivy2 dir as a volume"
   echo -e "--cache-root\t\tMount .ivy2 from a different base dir"
@@ -61,12 +59,6 @@ while [[ "$1" != '' ]]; do
       shift
       expect_arg $1
       SCALA_VERSION="$1"
-      shift
-      ;;
-    --sbt)
-      shift
-      expect_arg $1
-      SBT_VERSION="$1"
       shift
       ;;
     --image)
@@ -105,11 +97,11 @@ if [[ "$NOCACHE" == false ]]; then
 fi
 
 ENVIRON="-e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION -e DDE_NO_FATAL_WARNINGS -e XANTORIA_NO_FATAL_WARNINGS"
-IMAGE="$IMAGE:$SBT_VERSION-$SCALA_VERSION"
+IMAGE="$IMAGE:$SCALA_VERSION"
 VOLUMES="$VOLUMES -v $(pwd):/usr/src"
 
 if [[ $(docker images -q "$IMAGE") == '' ]]; then
-  echo "No $IMAGE image for sbt = $SBT_VERSION, scala = $SCALA_VERSION"
+  echo "No $IMAGE image for scala = $SCALA_VERSION"
   exit 1
 fi
 
