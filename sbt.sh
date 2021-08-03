@@ -6,7 +6,7 @@ else
   IMAGE="$SBT_IMAGE"
 fi
 
-SCALA_VERSION=2.12.8
+SCALA_VERSION=2.13.6
 VOLUMES=''
 QUIET=false
 
@@ -29,6 +29,9 @@ usage() {
   echo -e "--cache-root\t\tMount .ivy2 from a different base dir"
   echo -e "--image\t\tSpecify a different image; default is giftig/sbt"
   echo '--nocolor'
+  echo ''
+  echo 'You can also expose extra environment variables through to the docker container'
+  echo 'by setting the GIFTIG_SBT_EXTRA_ENVIRON variable like "-e VAR1 -e VAR2"'
 }
 expect_arg() {
   if [[ "$1" == '' ]]; then
@@ -96,7 +99,7 @@ if [[ "$NOCACHE" == false ]]; then
   VOLUMES="$VOLUMES -v $CACHE_ROOT/.cache/coursier:/root/.cache/coursier"
 fi
 
-ENVIRON="-e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION -e DDE_NO_FATAL_WARNINGS -e XANTORIA_NO_FATAL_WARNINGS"
+ENVIRON="-e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION $GIFTIG_SBT_EXTRA_ENVIRON"
 IMAGE="$IMAGE:$SCALA_VERSION"
 VOLUMES="$VOLUMES -v $(pwd):/usr/src"
 
